@@ -8,10 +8,6 @@ def get_json(json_file):
         return json.load(file)
 
 
-a = get_json("operations.json")
-# print(len(a))
-
-
 def get_executed_operations(operations_list: list):
     """выдает список список операций со статусом EXECUTED"""
     executed_operations = []
@@ -29,16 +25,26 @@ def get_last_operations(operations_list: list, operations_count: int):
 
 def get_correct_date(operations_list: list):
     """конвертирует формат даты в формат дд.мм.гггг"""
+    correct_date = []
     for operation in operations_list:
         if "date" in operation:
             operation["date"] = datetime.date(int(operation["date"][0:4]), int(operation["date"][5:7]), int(operation["date"][8:10]))
             operation["date"] = datetime.date.strftime(operation["date"], '%d.%m.%Y')
-    return operations_list
+        correct_date.append(operation["date"])
+    return correct_date
 
 
 def get_correct_inform(operations_list: list):
     operations_formatted_list = []
+    correct_date = get_correct_date(operations_list)
+    payer_info, payment_method_from = "", ""
+    recipient_info, recipient_method_to = "", ""
+    correct_date_day, description = "", ""
+    operation_amount = ""
+    i = 0
     for operation in operations_list:
+        correct_date_day = correct_date[i]
+        i += 1
         description = operation["description"]
         if "from" in operation:
             payer = operation["from"].split()
@@ -57,6 +63,7 @@ def get_correct_inform(operations_list: list):
                 recipient_method_to = f"{recipient_method[0:4]} {recipient_method[4:6]}** **** {recipient_method[-4:]}"
             recipient_info = " ".join(recipient)
         operation_amount = f"{operation['operationAmount']['amount']} {operation['operationAmount']['currency']['name']}"
-        operations_formatted_list.append(f"{get_correct_date(operations_list)} {description}\n{payer_info} {payment_method_from}"
-                                         f" -> {recipient_info} {recipient_method_to}\n{operation_amount}")
+        operations_formatted_list.append(f"{correct_date_day} {description}\n{payer_info} {payment_method_from}-> {recipient_info} {recipient_method_to}\n{operation_amount}")
+
+    return operations_formatted_list
 
