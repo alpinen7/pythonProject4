@@ -34,3 +34,5 @@ def test_get_correct_date(test_data):
 def test_get_correct_inform(test_data):
     assert utils.get_correct_inform(test_data)[0] == '26.08.2019 Перевод организации\nMaestro 1596 83** **** 5199-> Счет **9589\n31957.58 руб.'
 
+
+
