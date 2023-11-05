@@ -4,7 +4,7 @@ import datetime
 
 def get_json(json_file):
     """возвращает json-строку из json-файла"""
-    with open(json_file, "r") as file:
+    with open(json_file, "r", encoding="utf-8") as file:
         return json.load(file)
 
 
